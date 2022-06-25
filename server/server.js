@@ -1,35 +1,45 @@
+// import { generateRandomLetters } from "./helpers/serverHelpers";
+var helpers = require("./helpers/serverHelpers");
 const express = require("express");
+const bodyParser = require("body-parser");
 const app = express();
+app.use(bodyParser.urlencoded({ extended: false }));
 
-const hostname = "localhost";
-const port = process.env.port || 3001;
-
+// Mimicking persistence via using array within node server. Online DB such as Mongodb or Postgre could be used instead
 let encodedUrls = [];
-let index = 0;
 
+/**
+ * Sanity method to confirm data on initial URL exists.
+ */
 app.get("/", (req, res) => {
   res.statusCode = 200;
   res.setHeader("Content-Type", "text/plain");
-  res.end("Hello world!\n");
+  res.end("Hello world!");
 });
 
+/**
+ *
+ */
 app.post("/encode", (req, res) => {
-  uniqueUrl = `https://tpxtest.com/${index}`;
+  let uniqueString = helpers.randomLetters();
+  let uniqueUrl = `https://tpx.imp/${uniqueString}`;
 
-  encodedUrls[index] = {
+  encodedUrls[uniqueString] = {
     full: req.body.url,
     encoded: uniqueUrl,
   };
 
-  return uniqueUrl;
+  res.send(uniqueUrl);
 });
 
+/**
+ *
+ */
 app.post("/decode", (req, res) => {
-  var encodedUrlNum = parseInt(req.body.url.replace(/[^0-9]/g, ""));
+  var urlPath = req.path;
+  console.log(urlPath);
 
-  return encodedUrls[encodedUrlNum].full;
+  res.send(encodedUrls[urlPath].full);
 });
 
-app.listen(port, hostname, () => {
-  console.log(`Server current running at ${hostname}:${port}/`);
-});
+module.exports = app;
