@@ -7,7 +7,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // Mimicking persistence via using array within node server. Online DB such as Mongodb or Postgre could be used instead
-var encodedUrls = [];
+var UrlStore = [];
 
 /**
  * Sanity method to confirm data on initial URL exists.
@@ -25,12 +25,10 @@ app.post("/encode", (req, res) => {
   let uniqueString = helpers.randomLetters(10);
   let uniqueUrl = `https://tpx.imp/${uniqueString}`;
 
-  encodedUrls.push({
-    full: req.body.url,
+  UrlStore.push({
+    original: req.body.url,
     encoded: uniqueUrl,
   });
-
-  console.log(encodedUrls);
 
   res.send(uniqueUrl);
 });
@@ -41,13 +39,15 @@ app.post("/encode", (req, res) => {
 app.post("/decode", (req, res) => {
   var encodedUrl = req.body.url;
 
-  console.log(" TEST: ", encodedUrl, "TEST");
+  const foundURL = UrlStore.find((url) => {
+    return url.encoded === encodedUrl;
+  });
 
-  if (!Array.find(url => url.encoded === encodedUrls.encoded)) {
+  if (!foundURL) {
     return res.sendStatus(404);
   }
 
-  res.send(encodedUrls[encodedUrl].full);
+  res.send(foundURL.original);
 });
 
 module.exports = app;
