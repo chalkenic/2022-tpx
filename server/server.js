@@ -4,9 +4,10 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 // Mimicking persistence via using array within node server. Online DB such as Mongodb or Postgre could be used instead
-let encodedUrls = [];
+var encodedUrls = [];
 
 /**
  * Sanity method to confirm data on initial URL exists.
@@ -18,16 +19,18 @@ app.get("/", (req, res) => {
 });
 
 /**
- *
+ * Handles encoding of given URL and shortens to TPX alternative.
  */
 app.post("/encode", (req, res) => {
-  let uniqueString = helpers.randomLetters();
+  let uniqueString = helpers.randomLetters(10);
   let uniqueUrl = `https://tpx.imp/${uniqueString}`;
 
-  encodedUrls[uniqueString] = {
+  encodedUrls.push({
     full: req.body.url,
     encoded: uniqueUrl,
-  };
+  });
+
+  console.log(encodedUrls);
 
   res.send(uniqueUrl);
 });
@@ -36,10 +39,15 @@ app.post("/encode", (req, res) => {
  *
  */
 app.post("/decode", (req, res) => {
-  var urlPath = req.path;
-  console.log(urlPath);
+  var encodedUrl = req.body.url;
 
-  res.send(encodedUrls[urlPath].full);
+  console.log(" TEST: ", encodedUrl, "TEST");
+
+  if (!Array.find(url => url.encoded === encodedUrls.encoded)) {
+    return res.sendStatus(404);
+  }
+
+  res.send(encodedUrls[encodedUrl].full);
 });
 
 module.exports = app;

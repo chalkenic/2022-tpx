@@ -3,27 +3,18 @@ module.exports = {
    * Generate a random string of letters from ASCII characters, to ensure no matches within storage.
    * @returns charGenerator - String of characters defined in random loop.
    */
-  randomLetters: function generateRandomLetters() {
+  randomLetters: function generateRandomLetters(pathLength) {
     let charGenerator = "";
 
-    for (let index = 0; index < 10; index++) {
-      let randomASCIIValue = Math.floor(Math.random() * 74) + 48;
-
-      charGenerator += String.fromCharCode(randomASCIIValue);
+    for (let index = 0; index < pathLength; index++) {
+      charGenerator += this.safeChars().charAt(
+        Math.floor(Math.random() * pathLength)
+      );
     }
-
     return charGenerator;
   },
+
+  safeChars: function generateSafeURLCharacters() {
+    return "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  },
 };
-
-// export function generateRandomLetters() {
-//   let charGenerator = "";
-
-//   for (let index = 0; index < 10; index++) {
-//     let randomASCIIValue = Math.floor(Math.random() * 74) + 48;
-
-//     charGenerator += String.fromCharCode(randomASCIIValue);
-//   }
-
-//   return charGenerator;
-// }
