@@ -4,6 +4,7 @@
   "description": "TPX Challenge code",
   "main": "server.js",
   "dependencies": {
+    "axios": "^0.27.2",
     "body-parser": "^1.20.0",
     "express": "^4.18.1",
     "nodemon": "^2.0.18"
@@ -14,7 +15,7 @@
     "supertest": "^6.2.3"
   },
   "scripts": {
-    "test": "jest",
+    "test": "jest --detectOpenHandles",
     "start": "node index.js"
   },
   "jest": {
