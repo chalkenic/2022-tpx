@@ -27,6 +27,7 @@ app.get("/", (req, res) => {
  * Handles encoding of given URL and shortens to TPX alternative.
  */
 app.post("/encode", (req, res) => {
+  console.log(req.body.url);
   // TPX path addition has been set to 10 characters.
   let uniqueString = helpers.randomLetters(10);
   let uniqueUrl = `https://tp.x/${uniqueString}`;
