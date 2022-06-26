@@ -1,5 +1,5 @@
 import "./App.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Box,
   Button,
@@ -16,21 +16,28 @@ import {
 import axios from "axios";
 
 function App() {
+  // Three states to hold page data when uploading and changing conversion information.
   const [conversion, setConversion] = useState("encode");
   const [url, setUrl] = useState("");
   const [result, setResult] = useState("");
 
+  // Update convert choice whenever button group is changed.
   const handleConvertChange = (e) => {
     setConversion(e.target.value);
   };
+
+  // Change url data whenever text field is changed.
   const handleUrlChange = (e) => {
     setUrl(e.target.value);
   };
 
   const handleSubmit = (e) => {
+    //Prevent page from reloading after request.
     e.preventDefault();
 
+    // Url field must contain data.
     if (url !== "") {
+      // Switch statement for each type of conversion option. Error handling if none selected.
       switch (conversion) {
         case "encode":
           return axios.post("/encode", { url: url }).then((response) => {
@@ -51,6 +58,7 @@ function App() {
   };
   return (
     <div className="App">
+      {/* Mui components used to provide a clean form factor */}
       <Box sx={{ paddingTop: 5 }}>
         <Grid container justifyContent={"center"}>
           <Grid item xs={1}></Grid>
@@ -59,6 +67,7 @@ function App() {
               <Typography variant="h4">URL Shortening Service</Typography>
               <form onSubmit={handleSubmit}>
                 <FormControl sx={{ paddingBottom: 4 }} variant="outlined">
+                  {/* Text field handles entries made relating to the url of choice. */}
                   <TextField
                     id="standard-basic"
                     margin="dense"
@@ -80,6 +89,7 @@ function App() {
                   />
 
                   <FormLabel>Conversion Type:</FormLabel>
+                  {/* Button group handles the conversion type that the user wants. */}
                   <ToggleButtonGroup
                     exclusive
                     color="primary"
@@ -107,12 +117,11 @@ function App() {
               </form>
             </Paper>
           </Grid>
+          {/* Results of any API calls made to server are pasted into below tags. */}
           <Grid item xs={1}></Grid>
           <Grid item xs={5} sx={{ marginTop: "10px" }}>
-            <Paper elevation={5}>
-              <Typography variant="body1">Result</Typography>
-              <Typography variant="body2">{result}</Typography>
-            </Paper>
+            <Typography variant="body1">Result</Typography>
+            <Typography variant="body2">{result}</Typography>
           </Grid>
         </Grid>
       </Box>
