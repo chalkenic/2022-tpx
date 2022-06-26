@@ -1,4 +1,3 @@
-// import { generateRandomLetters } from "./helpers/serverHelpers";
 var helpers = require("./helpers/server");
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -47,6 +46,7 @@ app.post("/encode", (req, res) => {
 app.post("/decode", (req, res) => {
   var encodedUrl = req.body.url;
 
+  // Check local storage array to source the Url by the encoded data.
   const foundURL = UrlStore.find((url) => {
     return url.encoded === encodedUrl;
   });
