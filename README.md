@@ -56,4 +56,6 @@ cd tpx_challenge
 # Launch tests
 npm run test
 
-</div
+```
+
+</div>
